@@ -1,11 +1,43 @@
 package main
 
-import "awesomeProject/quiz"
+import (
+	"awesomeProject/url_handler"
+	"fmt"
+	"net/http"
+)
 
-// TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
-// the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
 func main() {
-	//TIP <p>Press <shortcut actionId="ShowIntentionActions"/> when your caret is at the underlined text
-	// to see how GoLand suggests fixing the warning.</p><p>Alternatively, if available, click the lightbulb to view possible fixes.</p>
-	quiz.ExerciseOne(3)
+	mux := defaultMux()
+
+	// Build the MapHandler using the mux as the fallback
+	pathsToUrls := map[string]string{
+		"/urlshort-godoc": "https://godoc.org/github.com/gophercises/urlshort",
+		"/yaml-godoc":     "https://godoc.org/gopkg.in/yaml.v2",
+	}
+	mapHandler := url_handler.MapHandler(pathsToUrls, mux)
+
+	// Build the YAMLHandler using the mapHandler as the
+	// fallback
+	yaml := `
+	- path: /urlshort
+	url: https://github.com/gophercises/urlshort
+	- path: /urlshort-final
+	url: https://github.com/gophercises/urlshort/tree/solution
+	`
+	yamlHandler, err := url_handler.YAMLHandler([]byte(yaml), mapHandler)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Starting the server on :8080")
+	http.ListenAndServe(":8080", yamlHandler)
+}
+
+func defaultMux() *http.ServeMux {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", hello)
+	return mux
+}
+
+func hello(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Hello, world!")
 }
