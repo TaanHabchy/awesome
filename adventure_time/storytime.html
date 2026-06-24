@@ -9,8 +9,14 @@
 <header>
     <h1>{{.PageBody}}</h1>
 </header>
-<!--<main>-->
-<!--    <p>{{.Message}}</p>-->
-<!--</main>-->
+
+<ul>
+    {{range .PageOptions}}
+    <li>
+        <a href="/{{.Arc}}">{{.Text}}</a>
+    </li>
+    {{end}}
+</ul>
+
 </body>
 </html>
