@@ -1,12 +1,7 @@
 package main
 
-import (
-	"awesomeProject/adventure_time"
-	"net/http"
-)
+import "awesomeProject/html_link_parser"
 
 func main() {
-	http.HandleFunc("/", adventure_time.StoryHandler)
-	println("Server running at http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	html_link_parser.HtmlLinkParser(4)
 }
