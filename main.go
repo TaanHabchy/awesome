@@ -1,7 +1,7 @@
 package main
 
-import "awesomeProject/html_link_parser"
+import "awesomeProject/hacker_rank"
 
 func main() {
-	html_link_parser.HtmlLinkParser(4)
+	hacker_rank.CamelCase("WERD")
 }
